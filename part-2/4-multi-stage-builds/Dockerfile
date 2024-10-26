@@ -1,0 +1,17 @@
+FROM node:20 AS base
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+
+FROM base AS development
+COPY . .
+CMD ["npm", "run", "dev"]
+
+# CMD if (env == "dev" ? ["npm", "run", "dev"] : ["npm", "run", "start"])
+
+FROM base AS production
+COPY . .
+RUN npm prune --production
+CMD ["npm", "run", "start"]
+
+
